@@ -24,7 +24,7 @@ def upload_image_with_detection(image_url_or_path):
 def crop_image_with_detection(public_id, height, width):
     diagonal_size = calculate_diagonal_size(height, width)
 
-    return "https://res.cloudinary.com/{}/image/upload/c_thumb,g_adv_face,h_{},w_{}/{}.png".format(
+    return "https://res.cloudinary.com/{}/image/upload/c_thumb,g_adv_face,h_{},w_{},b_rgb:000/{}.png".format(
         os.environ.get("CLOUDINARY_CLOUD_NAME"),
         diagonal_size,
         diagonal_size,
