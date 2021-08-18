@@ -1,0 +1,92 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Boardroom One Profile Demo{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div class="jumbotron text-center p-2">
+        <h2>Boardroom One Profile Demo</h2>
+      </div>
+    </div>
+
+    <div class="col-lg-7" align="center">
+      <h5>Instructions</h5>
+      <p>Upload an image of yourself and we will generate your Boardroom One profile photo for you. Here's an example of what you should expect.</p>
+      <div class="row">
+        <div class="col-lg-6">
+          <img width="100%" src="https://res.cloudinary.com/lordghostx/image/upload/v1629300710/image_0024_lp96qi.jpg">
+          <p>Profile photo before generation</p>
+        </div>
+        <div class="col-lg-6">
+          <img width="100%" src="https://res.cloudinary.com/lordghostx/image/upload/c_thumb,g_adv_face,h_736,w_736,b_rgb:000/yq7whiezzdjvxmvdezfz.png">
+          <p>Profile photo after generation</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5 m-auto">
+      <div id="uploadForm">
+        <div class="form-group">
+          <label for="profilePhoto">Upload an image of yourself</label>
+          <input type="file" class="form-control" id="profilePhoto" accept="image/*">
+        </div>
+        <div class="text-center">
+          <button type="button" onclick="generateProfilePhoto()" class="btn btn-primary">Generate Profile Photo</button>
+          <p id="msg" class="m-2"></p>
+        </div>
+      </div>
+      <div id="loadingBar" style="display: none">
+        <img width="100%" src="https://cdn.dribbble.com/users/4466/screenshots/2507869/vest_logo_dribbble.gif">
+      </div>
+      <div id="resultPage" style="display: none" align="center">
+        <img width="100%" src="#">
+        <p>Do you like your profile picture?</p>
+        <a href="#" class="btn btn-success">👍</a>
+        <a href="/" class="btn btn-danger">👎</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const msgBox = document.querySelector("#msg");
+  const profilePhoto = document.querySelector("#profilePhoto");
+  const uploadForm = document.querySelector("#uploadForm");
+  const loadingBar = document.querySelector("#loadingBar");
+  const resultPage = document.querySelector("#resultPage");
+
+  function hide() {
+    uploadForm.style.display = "none";
+    loadingBar.style.display = "none";
+    resultPage.style.display = "none";
+  }
+
+  function generateProfilePhoto() {
+    msgBox.innerHTML = "";
+
+    if (profilePhoto.files.length === 0) {
+      msgBox.innerHTML = "You have not selected any image to upload";
+      return;
+    }
+
+    hide();
+    loadingBar.style.display = "block";
+
+    const formdata = new FormData();
+    formdata.append("profilePhoto", profilePhoto.files[0]);
+
+    fetch("/profile/", {
+      method: "POST",
+      body: formdata
+    }).then(async (response) => {
+      const result = await response.json();
+
+      hide();
+      resultPage.children[0].src = result.data.profilePhoto;
+      resultPage.children[2].href = result.data.profilePhoto;
+      resultPage.style.display = "block";
+    });
+  }
+</script>
+{% endblock %}

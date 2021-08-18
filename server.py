@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+from flask_bootstrap import Bootstrap
 from dotenv import load_dotenv
 import cloudinary_service
 from remove_bg_service import remove_image_background
@@ -7,6 +8,7 @@ from remove_bg_service import remove_image_background
 load_dotenv()
 cloudinary_service.init_config()
 app = Flask(__name__)
+Bootstrap(app)
 
 
 @app.route("/profile/", methods=["POST"])
@@ -42,6 +44,11 @@ def create_profile_photo():
             "profilePhoto": cropped_image
         }
     }), 200
+
+
+@app.route("/")
+def demo_page():
+    return render_template("demo.html")
 
 
 if __name__ == "__main__":
