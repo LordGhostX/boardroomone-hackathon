@@ -25,7 +25,8 @@ def create_profile_photo():
     image_without_background = remove_image_background(profile_photo)
 
     # upload the profile photo cloudinary
-    uploaded_image = cloudinary_service.upload_image_with_detection(image_without_background)
+    uploaded_image = cloudinary_service.upload_image_with_detection(
+        image_without_background)
 
     # crop the image stored in cloudinary and change the background color
     cropped_image = cloudinary_service.crop_image_with_detection(
